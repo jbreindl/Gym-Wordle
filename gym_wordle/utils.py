@@ -40,4 +40,31 @@ def get_words(category: str, build: bool=False) -> npt.NDArray[np.int64]:
            np.save(arr_path, words)
 
     return np.load(arr_path)
-        
+
+
+def play():
+    import gym
+    import gym_wordle
+    
+    env = gym.make('Wordle-v0')
+    
+    env.reset()
+    done = False
+    
+    while not done:
+        env.render()
+        good_guess = False
+    
+        while not good_guess:
+    
+            guess = input('Guess: ').lower()
+            action = to_array(guess)
+    
+            if env.action_space.contains(action):
+                good_guess = True
+    
+        state, reward, done, info = env.step(action)
+    
+    env.render()
+    
+    print(f"The word was {to_english(env.solution).upper()}")
