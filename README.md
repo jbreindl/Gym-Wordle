@@ -2,7 +2,10 @@
 
 An OpenAI gym compatible environment for training agents to play Wordle.
 
-![Demo human mode](https://user-images.githubusercontent.com/8514041/152437216-d78e85f6-8049-4cb9-ae61-3c015a8a0e4f.gif)
+<p align='center'>
+  <img src="https://user-images.githubusercontent.com/8514041/152437216-d78e85f6-8049-4cb9-ae61-3c015a8a0e4f.gif"><br/>
+  <em>User-input demo of the environment</em>
+</p>
 
 ## Installation
 
@@ -90,7 +93,7 @@ Coming soon!
 
 If you decide to use this project in your work, please consider a citation!
 
-```latex
+```bibtex
 @misc{gym_wordle,
   author = {Kraemer, David},
   title = {An Environment for Reinforcement Learning with Wordle},
