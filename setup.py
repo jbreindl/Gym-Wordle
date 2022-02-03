@@ -2,10 +2,10 @@ from distutils.core import setup
 
 
 setup(
-    name='WordleBot',
+    name='gym_wordle',
     version='0.1',
-    description='RL environment for playing Wordle',
+    description='OpenAI gym compatible environment for playing Wordle',
     author='David Kraemer',
     author_email='david.kraemer@stonybrook.edu',
-    packages=['wordlebot'], 
+    packages=['gym_wordle'], 
 )
