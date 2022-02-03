@@ -1,9 +1,11 @@
-from wordlebot.wordle import WordleEnv
-from wordlebot.utils import to_array, to_english
+import gym
+import gym_wordle
 
-env = WordleEnv()
+from gym_wordle.utils import to_array, to_english
+
+env = gym.make('Wordle-v0')
+
 env.reset()
-env.solution = to_array('sheet')
 done = False
 
 while not done:
