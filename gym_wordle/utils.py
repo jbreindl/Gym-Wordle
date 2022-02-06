@@ -68,3 +68,4 @@ def play():
     env.render()
     
     print(f"The word was {to_english(env.solution).upper()}")
+
