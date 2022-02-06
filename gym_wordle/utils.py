@@ -35,7 +35,7 @@ def to_array(word: str) -> npt.NDArray[np.int64]:
     return np.array([_char_d[c] for c in word])
 
 
-def get_words(category: str, build: bool =False) -> npt.NDArray[np.int64]:
+def get_words(category: str, build: bool=False) -> npt.NDArray[np.int64]:
     """Loads a list of words in array form. 
 
     If specified, this will recompute the list from the human-readable list of
@@ -73,19 +73,19 @@ def play():
     env = gym.make('Wordle-v0')  # load the environment
     
     env.reset()
-    solution = to_english(env.solution).upper()  # no peeking!
+    solution = to_english(env.unwrapped.solution_space[env.solution]).upper()  # no peeking!
 
     done = False
     
     while not done:
-        action = to_array('too long')
+        action = -1 
 
         # in general, the environment won't be forgiving if you input an
         # invalid word, but for this function I want to let you screw up user
-        # input without consequence, so just loops until valid input is taken.
+        # input without consequence, so just loops until valid input is taken
         while not env.action_space.contains(action):
             guess = input('Guess: ')
-            action = to_array(guess)
+            action = env.unwrapped.action_space.index_of(to_array(guess))
     
         state, reward, done, info = env.step(action)
         env.render()
