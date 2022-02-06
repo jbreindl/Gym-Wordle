@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setuptools.setup(
     name='gym_wordle',
-    version='0.1.0',
+    version='0.1.2',
     author='David Kraemer',
     author_email='david.kraemer@stonybrook.edu',
     description='OpenAI gym environment for training agents on Wordle',
