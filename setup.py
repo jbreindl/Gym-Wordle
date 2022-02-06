@@ -12,7 +12,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/DavidNKraemer/Gym-Wordle',
-    package_dir={'': 'gym_wordle'},
     packages=setuptools.find_packages(where='gym_wordle'),
     python_requires='>=3.7',
     classifiers=[
