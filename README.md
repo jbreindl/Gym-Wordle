@@ -49,37 +49,10 @@ of the game. And it isn't so hard to set up the environment to play for
 yourself. Here's an example script:
 
 ```Python
-import gym
-import gym_wordle
+from gym_wordle.utils import play
 
-from gym_wordle.utils import to_array, to_english
-
-env = gym.make('Wordle-v0')
-
-env.reset()
-
-done = False
-
-while not done:
-    env.render()
-    valid = False
-
-    while not valid:
-        guess = input('Guess: ').lower()
-        action = to_array(guess)
-
-        if env.action_space.contains(action):
-            valid = True
-
-    state, reward, done, info = env.step(action)
-
-env.render()
-
-print(f"The word was {to_english(env.solution).upper()}")
+play()
 ```
-
-The above script is more or less equivalent to the function `play()` found in
-`gym_wordle.utils`.
 
 ## Documentation
 
