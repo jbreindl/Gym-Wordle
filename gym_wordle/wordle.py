@@ -1,35 +1,108 @@
 import gym
 import numpy as np
+import numpy.typing as npt
 from sty import fg, bg, ef, rs
-from collections import defaultdict
 
+from collections import defaultdict
 from gym_wordle.utils import to_english, to_array, get_words
+from typing import Optional 
 
 
 class WordList(gym.spaces.MultiDiscrete):
+    """Super class for defining a space of valid words according to a specified
+    list.
 
-    def __init__(self, words, **kwargs):
+    At present, the space is a subclass of gym.spaces.MultiDiscrete, all
+    elements of the space are one-dimensional, length five integer arrays
+    containing integers from 0,...,26 (inclusive).
+
+    This class overrides the contains and sample methods from the MultiDiscrete
+    parent, because the additional qualification for elements in this space is
+    that they be entries in the list of words provided.
+    """
+
+    def __init__(self, words: npt.NDArray[np.int64], **kwargs):
+        """
+        Args:
+            words: Collection of words in array form with shape (_, 5), where
+              each word is a row of the array. Each array element is an integer
+              between 0,...,26 (inclusive).
+            kwargs: See documentation for gym.spaces.MultiDiscrete
+        """
         super().__init__([26] * 5, **kwargs)
         self.words = words
 
-    def contains(self, x):
+    def contains(self, x: npt.NDArray[np.int64]) -> bool:
+        """Checks whether a given word is an element of the space.
+
+        Args:
+            x: Word in array form. It is assumed that x has shape (5,)
+              and is composed of integers between 0,...,26 (inclusive). 
+
+        Returns:
+            True if and only if x corresponds to a row in the list of words
+            comprising the space.
+        """
         return (x == self.words).all(axis=1).any()
 
-    def sample(self) -> np.ndarray:
+    def sample(self) -> npt.NDArray[np.int64]:
+        """Samples a word from the space.
+
+        Returns:
+            An entry from the list of words provided to the space in array
+            form.
+        """
+        # TODO: use the builtin random capabilities from the super class
         index = self.np_random.randint(self.words.shape[0])
         return self.words[index]
 
 
 class SolutionList(WordList):
+    """Space for *solution* words to the Wordle environment.
 
+    In the game Wordle, there are two different collections of words:
+
+        * "guesses", which the game accepts as valid words to use to guess the
+          answer.
+        * "solutions", which the game uses to choose solutions from.
+
+    Of course, the set of solutions is a strict subset of the set of guesses.
+
+    Reference: https://fivethirtyeight.com/features/when-the-riddler-met-wordle/
+
+    This class represents the set of solution words.
+    """
     def __init__(self, **kwargs):
-        super().__init__(get_words('solution'), **kwargs)
+        """
+        Args:
+            kwargs: See documentation for gym.spaces.MultiDiscrete
+        """
+        words = get_words('solution')
+        super().__init__(words, **kwargs)
 
 
 class GuessList(WordList):
+    """Space for *solution* words to the Wordle environment.
 
+    In the game Wordle, there are two different collections of words:
+
+        * "guesses", which the game accepts as valid words to use to guess the
+          answer.
+        * "solutions", which the game uses to choose solutions from.
+
+    Of course, the set of solutions is a strict subset of the set of guesses.
+
+    Reference: https://fivethirtyeight.com/features/when-the-riddler-met-wordle/
+
+    This class represents the set of guess words.
+    """
     def __init__(self, **kwargs):
-        super().__init__(get_words('guess'), **kwargs)
+        """
+        Args:
+            kwargs: See documentation for gym.spaces.MultiDiscrete
+        """
+        words = get_words('guess')
+        super().__init__(words, **kwargs)
 
 
 class WordleEnv(gym.Env):
@@ -101,20 +174,19 @@ class WordleEnv(gym.Env):
                 self.state[self.round]['flags'][i] = 3
 
         self.round += 1
+
         correct = (action == self.solution).all()
         game_over = (self.round == 6)
 
         done = correct or game_over
 
-        if correct:
-            reward = 1.
-        elif done:
-            reward = -1.
-        else:
-            reward = 0.
+        # Total reward equals -(number of incorrect guesses)
+        reward = 0. if correct else -1.
 
         return self.state, reward, done, {}
 
-    def seed(self, seed=None):
+    def seed(self, seed: Optional[int]= None): 
+        """
+        """
         self.seed = seed
         self.rng = np.random.default_rng(seed=seed)
