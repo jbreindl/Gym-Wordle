@@ -227,7 +227,7 @@ class WordleEnv(gym.Env):
                     self._highlighter, 
                     to_english(row[:self.n_letters]).upper(), 
                     row[self.n_letters:]
-                )
+                ))
 
                 print(text)
         else:
@@ -258,7 +258,8 @@ class WordleEnv(gym.Env):
 
         # populate the flag characters into the row (flag channel)
         counter = Counter()
-        for i, char in enumerate(action, self.n_letters):  # start at i=5
+        for i, char in enumerate(action):
+            flag_i = i + self.n_letters  # starts at 5
             counter[char] += 1
 
             if char == solution[i]:  # character is in correct position
