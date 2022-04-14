@@ -222,7 +222,7 @@ class WordleEnv(gym.Env):
             mode: the mode to render with
         """
         if mode == 'human':
-            for row in self.states:
+            for row in self.state:
                 text = ''.join(map(
                     self._highlighter, 
                     to_english(row[:self.n_letters]).upper(), 
@@ -263,14 +263,14 @@ class WordleEnv(gym.Env):
             counter[char] += 1
 
             if char == solution[i]:  # character is in correct position
-                self.state[self.round, i] = self.right_pos
+                self.state[self.round, flag_i] = self.right_pos
             elif counter[char] <= (char == solution).sum():  
                 # current character has been seen within correct number of
                 # occurrences 
-                self.state[self.round, i] = self.wrong_pos
+                self.state[self.round, flag_i] = self.wrong_pos
             else:
                 # wrong character, or "correct" character too many times
-                self.state[self.round, i] = self.wrong_char
+                self.state[self.round, flag_i] = self.wrong_char
 
         self.round += 1
 
