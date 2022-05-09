@@ -168,7 +168,7 @@ class WordleEnv(gym.Env):
         super().__init__()
 
         self.seed()
-        self.action_space = GuessList()
+        self.action_space = SolutionList()
         self.solution_space = SolutionList()
 
         self.observation_space = WordleObsSpace()
